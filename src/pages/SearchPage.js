@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Card from '../components/Card'
+import { useSelector } from 'react-redux'
 
 const SearchPage = () => {
   const location = useLocation()
@@ -55,8 +56,10 @@ const SearchPage = () => {
     window.addEventListener('scroll',handleScroll)
 },[])
 
+const isClicked = useSelector((state)=> state.click_redux_slice.isClicked);
+
   return (
-    <div className='py-16'>
+    <div className={isClicked? 'py-16':'py-16 bg-slate-100'}>
 
         <div className='lg:hidden my-2 mx-1 sticky top-[70px] z-30'>
             <input 
@@ -68,7 +71,7 @@ const SearchPage = () => {
             />
         </div>
         <div className='container mx-auto'>
-          <h3 className='capitalize text-lg lg:text-xl font-semibold my-3'>Search Results</h3>
+          <h3 className={isClicked? 'capitalize text-lg lg:text-xl font-semibold my-3':'capitalize text-black/60 text-lg lg:text-xl font-semibold my-3'}>Search Results</h3>
 
           <div className='grid grid-cols-[repeat(auto-fit,230px)] gap-6 justify-center lg:justify-start'>
               {

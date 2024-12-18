@@ -4,7 +4,10 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import userIcon from '../assets/user.png'
 import { IoSearchOutline } from "react-icons/io5";
 import { navigation } from '../contants/navigation';
-
+import { toggleClick } from '../store/clickSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { MdLightMode } from "react-icons/md";
+import { MdDarkMode } from "react-icons/md";
 
 const Header = () => {
     const location = useLocation()
@@ -22,14 +25,21 @@ const Header = () => {
         e.preventDefault()
     }
 
+    const isClicked = useSelector((state) => state.click_redux_slice.isClicked);
+    const dispatch = useDispatch();
+
+    const handleToggle = () => {
+        dispatch(toggleClick()); 
+    };
+
   return (
-    <header className='fixed top-0 w-full h-16 bg-black bg-opacity-50 z-40'>
+    <header className={isClicked ? 'fixed top-0 w-full h-16 bg-black bg-opacity-50 z-40':'fixed top-0 w-full h-16 bg-slate-100 text-black bg-opacity-90 z-40'}>
             <div className='container mx-auto px-3 flex items-center h-full'>
                 <Link to={"/"}>
                     <img
                         src={logo}
                         alt='logo'
-                        width={120} 
+                        width={60}
                     />
                 </Link>
 
@@ -38,7 +48,7 @@ const Header = () => {
                         navigation.map((nav,index)=>{
                             return(
                                 <div>
-                                    <NavLink key={nav.label+"header"+index} to={nav.href} className={({isActive})=>`px-2 hover:text-neutral-100 ${isActive && "text-neutral-100"}`}>
+                                    <NavLink key={nav.label+"header"+index} to={nav.href} className={isClicked? ({isActive})=>`px-2 hover:text-neutral-100 hover:font-extrabold ${isActive && "text-neutral-100 font-extrabold"}`:({isActive})=>`px-2 hover:text-neutral-900 hover:font-extrabold ${isActive && "text-neutral-900 font-extrabold"}`}>
                                         {nav.label}
                                     </NavLink>
                                 </div>
@@ -56,15 +66,21 @@ const Header = () => {
                             onChange={(e)=>setSearchInput(e.target.value)}
                             value={searchInput}
                         />
-                        <button className='text-2xl text-white'>
+                        <button className={isClicked? 'text-2xl text-white':'text-2xl'}>
                                 <IoSearchOutline/>
                         </button>
                     </form>
                     <div className='w-8 h-8 rounded-full overflow-hidden cursor-pointer active:scale-50 transition-all'>
-                        <img
-                            src={userIcon}
-                            width='w-ful h-full' 
-                        />
+                        <Link to={"/user"}>
+                            <img
+                                src={userIcon}
+                                width='w-ful h-full'
+                                alt="" 
+                            />
+                        </Link>
+                    </div>
+                    <div className='ml-auto cursor-pointer'>
+                        {isClicked ? <MdLightMode size={32} onClick={handleToggle}/> : <MdDarkMode className='text-black' size={32} onClick={handleToggle}/>}
                     </div>
                 </div>
             </div>

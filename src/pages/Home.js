@@ -12,9 +12,10 @@ const Home = () => {
   const { data : topRatedData } = useFetch('/movie/top_rated')
   const { data : popularTvShowData } = useFetch('/tv/popular')
   const { data : onTheAirShowData } = useFetch('/tv/on_the_air')
+  const isClicked = useSelector((state)=> state.click_redux_slice.isClicked );
   
   return (
-    <div>
+    <div className={isClicked? '':'bg-slate-100'}>
         <BannerHome/>
         <HorizontalScollCard data={trendingData} heading={"Trending"} trending={true}/>
         <HorizontalScollCard data={nowPlayingData} heading={"Now Playing"} media_type={"movie"}/>
